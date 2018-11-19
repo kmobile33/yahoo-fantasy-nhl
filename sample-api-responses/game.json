@@ -1,0 +1,23 @@
+{
+    "fantasy_content": {
+        "xml:lang": "en-US",
+        "yahoo:uri": "/fantasy/v2/game/386/",
+        "game": [
+            {
+                "game_key": "386",
+                "game_id": "386",
+                "name": "Hockey",
+                "code": "nhl",
+                "type": "full",
+                "url": "https://hockey.fantasysports.yahoo.com/hockey",
+                "season": "2018",
+                "is_registration_over": 0,
+                "is_game_over": 0,
+                "is_offseason": 0
+            }
+        ],
+        "time": "53.743124008179ms",
+        "copyright": "Data provided by Yahoo! and STATS, LLC",
+        "refresh_rate": "60"
+    }
+}

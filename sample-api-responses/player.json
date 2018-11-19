@@ -1,0 +1,72 @@
+{
+    "fantasy_content": {
+        "xml:lang": "en-US",
+        "yahoo:uri": "/fantasy/v2/player/386.p.1644",
+        "player": [
+            [
+                {
+                    "player_key": "386.p.1644"
+                },
+                {
+                    "player_id": "1644"
+                },
+                {
+                    "name": {
+                        "full": "Patrick Marleau",
+                        "first": "Patrick",
+                        "last": "Marleau",
+                        "ascii_first": "Patrick",
+                        "ascii_last": "Marleau"
+                    }
+                },
+                {
+                    "editorial_player_key": "nhl.p.1644"
+                },
+                {
+                    "editorial_team_key": "nhl.t.21"
+                },
+                {
+                    "editorial_team_full_name": "Toronto Maple Leafs"
+                },
+                {
+                    "editorial_team_abbr": "Tor"
+                },
+                {
+                    "uniform_number": "12"
+                },
+                {
+                    "display_position": "C,LW"
+                },
+                {
+                    "headshot": {
+                        "url": "https://s.yimg.com/iu/api/res/1.2/U1YaMZZFxgL6k4WtqH0ykA--~B/YXBwaWQ9c2hhcmVkO2NoPTIzMzY7Y3I9MTtjdz0xNzkwO2R4PTg1NztkeT0wO2ZpPXVsY3JvcDtoPTYwO3E9MTAwO3c9NDY-/https://s.yimg.com/xe/i/us/sp/v/nhl_cutout/players_l/10172018/1644.png",
+                        "size": "small"
+                    },
+                    "image_url": "https://s.yimg.com/iu/api/res/1.2/U1YaMZZFxgL6k4WtqH0ykA--~B/YXBwaWQ9c2hhcmVkO2NoPTIzMzY7Y3I9MTtjdz0xNzkwO2R4PTg1NztkeT0wO2ZpPXVsY3JvcDtoPTYwO3E9MTAwO3c9NDY-/https://s.yimg.com/xe/i/us/sp/v/nhl_cutout/players_l/10172018/1644.png"
+                },
+                {
+                    "is_undroppable": "0"
+                },
+                {
+                    "position_type": "P"
+                },
+                {
+                    "eligible_positions": [
+                        {
+                            "position": "C"
+                        },
+                        {
+                            "position": "LW"
+                        }
+                    ]
+                },
+                [],
+                [],
+                []
+            ]
+        ],
+        "time": "56.22410774231ms",
+        "copyright": "Data provided by Yahoo! and STATS, LLC",
+        "refresh_rate": "60"
+    }
+}
