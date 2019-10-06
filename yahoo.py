@@ -18,7 +18,11 @@ class Yahoo:
         )
 
         # Use saved token if it hasn't expired
-        saved_token_expiration = datetime.datetime.strptime(self.credentials['expires'], "%Y-%m-%d %H:%M:%S.%f")
+        if 'expires' in self.credentials.keys():
+            saved_token_expiration = datetime.datetime.strptime(self.credentials['expires'], "%Y-%m-%d %H:%M:%S.%f")
+        else:
+            saved_token_expiration = datetime.datetime.min 
+
         if datetime.datetime.now() < saved_token_expiration:
             data = {
                 'client_id': self.credentials['client_id'],
