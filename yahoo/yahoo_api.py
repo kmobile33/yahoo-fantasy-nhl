@@ -4,7 +4,7 @@ import webbrowser
 from rauth import OAuth2Service
 from rauth.utils import parse_utf8_qsl
 
-class Yahoo:
+class YahooApi:
     def __init__(self, credentials_path):
         self._credentials_path = credentials_path
         self._load_credentials()
