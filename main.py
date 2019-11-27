@@ -5,8 +5,7 @@ import time
 from yahoo.fantasy_hockey_api import FantasyHockeyApi
 from team import Team
 
-GAME = 386
-LEAGUE = 75370
+LEAGUE = 52805 #75370
 TEAM = 5
 
 def load_all_team_info(api):

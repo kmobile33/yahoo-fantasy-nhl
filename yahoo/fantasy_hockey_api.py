@@ -1,12 +1,11 @@
 from yahoo.yahoo_api import YahooApi
 
 class FantasyHockeyApi(YahooApi):
-    def __init__(self, credentials, league_id):
-        self.base_url = "https://fantasysports.yahooapis.com/fantasy/v2/"
-        self.game = 386
-        self.league = league_id
-
+    def __init__(self, credentials, league_id, game_id=None):
         super().__init__(credentials)
+        self.base_url = "https://fantasysports.yahooapis.com/fantasy/v2/"
+        self.game = game_id or self.get_game()
+        self.league = league_id
 
     def get_team(self, team_id):
         response = self.get(self.base_url + "team/" + str(self.game) + ".l." + str(self.league) + ".t." + str(team_id) + "/")
@@ -62,7 +61,9 @@ class FantasyHockeyApi(YahooApi):
         return self.get(self.base_url + "team/" + str(self.game) + ".l." + str(self.league) + ".t." + str(team_id) + "/roster/")
 
     def get_game(self):
-        return self.get(self.base_url + "game/" + str(self.game) + "/")
+        """Fetches the game ID for the current NHL season in Yahoo"""
+        response = self.get(self.base_url + "game/nhl")
+        return response['fantasy_content']['game'][0]['game_id']
 
     def get_league(self):
         return self.get(self.base_url + "league/" + str(self.game) + ".l." + str(self.league) + "/")
