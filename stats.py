@@ -14,6 +14,45 @@ class Stats():
         self.goalie_sa = kwargs.get('goalie_sa')
         self.goalie_so = kwargs.get('goalie_so')
 
+    def __count_stat_wins(self, other):
+        """Gets count of categories won. Used for object comparisons."""
+        self_count = other_count = 0
+        for attr, value in self.__dict__.items():
+            if value > getattr(other, attr):
+                self_count += 1
+            elif value < getattr(other, attr):
+                other_count += 1
+
+        return self_count, other_count
+
+    def __eq__(self, other):
+        for attr, value in self.__dict__.items():
+            if value != getattr(other, attr):
+                return False
+        return True
+
+    def __ne__(self, other):
+        for attr, value in self.__dict__.items():
+            if value != getattr(other, attr):
+                return True
+        return False
+
+    def __lt__(self, other):
+        self_count, other_count = self.__count_stat_wins(other)
+        return self_count < other_count
+
+    def __le__(self, other):
+        self_count, other_count = self.__count_stat_wins(other)
+        return self_count <= other_count
+
+    def __gt__(self, other):
+        self_count, other_count = self.__count_stat_wins(other)
+        return self_count > other_count
+
+    def __ge__(self, other):
+        self_count, other_count = self.__count_stat_wins(other)
+        return self_count >= other_count
+
     def __add__(self, other):
         """Overload of the add operator. GAA produces averages."""
         stats = {
@@ -25,7 +64,7 @@ class Stats():
             'blocks' : self.blocks + other.blocks,
             'wins' : self.wins + other.wins,
             'goalie_ga' : self.goalie_ga + other.goalie_ga,
-            'goalie_gaa' : 0.5*(self.goalie_gaa or 0) + 0.5*(other.goalie_gaa or 0),
+            'goalie_gaa' : (self.goalie_gaa or 0) + (other.goalie_gaa or 0),
             'goalie_sa' : self.goalie_sa + other.goalie_sa,
             'goalie_so' : self.goalie_so + other.goalie_so
         }
@@ -42,9 +81,41 @@ class Stats():
             'blocks' : self.blocks + other,
             'wins' : self.wins + other,
             'goalie_ga' : self.goalie_ga + other,
-            'goalie_gaa' : 0.5*(self.goalie_gaa or 0) + 0.5*other,
+            'goalie_gaa' : (self.goalie_gaa or 0) + other,
             'goalie_sa' : self.goalie_sa + other,
             'goalie_so' : self.goalie_so + other
+        }
+        return Stats(**stats)
+
+    def __truediv__(self, other):
+        stats = {
+            'goals' : self.goals / other,
+            'assists' : self.assists / other,
+            'penalty_minutes' : self.penalty_minutes / other,
+            'shots_on_goal' : self.shots_on_goal / other,
+            'hits' : self.hits / other,
+            'blocks' : self.blocks / other,
+            'wins' : self.wins / other,
+            'goalie_ga' : self.goalie_ga / other,
+            'goalie_gaa' : (self.goalie_gaa or 0) / other,
+            'goalie_sa' : self.goalie_sa / other,
+            'goalie_so' : self.goalie_so / other
+        }
+        return Stats(**stats)
+
+    def __rtruediv__(self, other):
+        stats = {
+            'goals' : self.goals / other,
+            'assists' : self.assists / other,
+            'penalty_minutes' : self.penalty_minutes / other,
+            'shots_on_goal' : self.shots_on_goal / other,
+            'hits' : self.hits / other,
+            'blocks' : self.blocks / other,
+            'wins' : self.wins / other,
+            'goalie_ga' : self.goalie_ga / other,
+            'goalie_gaa' : (self.goalie_gaa or 0) / other,
+            'goalie_sa' : self.goalie_sa / other,
+            'goalie_so' : self.goalie_so / other
         }
         return Stats(**stats)
 
@@ -73,4 +144,3 @@ class Stats():
         }
         
         return cls(**stat_kwargs)
-
