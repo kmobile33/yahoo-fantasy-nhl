@@ -14,8 +14,7 @@ def load_all_team_info(api):
     for team in teams:
         team.update_matchups(api.get_team_matchups(team.id))
 
-def get_team_matchup_data(api, teams):
-    return [Team(x) for x in api.get_team_matchups()]
+    return teams
 
 def main():
     api = FantasyHockeyApi('oauth.json', LEAGUE)
