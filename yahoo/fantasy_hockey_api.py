@@ -1,4 +1,5 @@
 from yahoo.yahoo_api import YahooApi
+from utilities import utilities
 
 class FantasyHockeyApi(YahooApi):
     def __init__(self, credentials, league_id, game_id=None):
@@ -18,17 +19,17 @@ class FantasyHockeyApi(YahooApi):
 
         matchups = []
         for key in raw_matchup_data.keys():
-            if self.__safe_cast(key, int):
+            if utilities.safe_cast(key, int):
                 # Save matchup info dictionary
                 matchup_info = raw_matchup_data[key]['matchup']
 
                 # The stat info is nested, so the following is to un-nest it and put it directly in this dictionary
                 matchup_team_dictionary = raw_matchup_data[key]['matchup']['0']['teams']
                 for mk in matchup_team_dictionary.keys():
-                    if self.__safe_cast(mk, int) != None:
+                    if utilities.safe_cast(mk, int) != None:
                         team_info = self.__flatten_list_of_dicts(matchup_team_dictionary[mk]['team'][0])
                         # Check if we have the target team_id, and if so, gather the stats
-                        if (self.__safe_cast(mk, int) != None) and (team_info['team_id'] == team_id):
+                        if (utilities.safe_cast(mk, int) != None) and (team_info['team_id'] == team_id):
                             # Set the 'stats' part of the matchup info and jump out
                             matchup_info['stats'] = matchup_team_dictionary[mk]['team'][1]['team_stats']['stats']
                             break
@@ -52,7 +53,7 @@ class FantasyHockeyApi(YahooApi):
         team_list = []
         for key in raw_team_list.keys():
             # Remove non-team dict entries from processing
-            if (self.__safe_cast(key, int)):
+            if (utilities.safe_cast(key, int)):
                 team_info = self.__flatten_list_of_dicts(raw_team_list[key]['team'][0])
                 # Add team info dict to the overall list of teams
                 team_list.append(team_info)
@@ -72,12 +73,6 @@ class FantasyHockeyApi(YahooApi):
 
     def get_all_players(self):
         return self.get(self.base_url + "league/" + str(self.game) + ".l." + str(self.league) + "/players/")
-
-    def __safe_cast(self, val, to_type, default=None):
-        try:
-            return to_type(val)
-        except (ValueError, TypeError):
-            return default
 
     def __flatten_list_of_dicts(self, list_of_dictionaries):
         """Flatten the list of property dictionaries into one dictionary. This ignores non-dictionaries in the list"""

@@ -9,10 +9,14 @@ LEAGUE = 52805 #75370
 TEAM = 5
 
 def load_all_team_info(api):
-    teams = [Team(x) for x in api.get_all_teams()]
+    """Gets the team info from the Yahoo API and creates a list of Team objects"""
+    teams = []
+    for team_data in api.get_all_teams():
+        # Get matchup data from API
+        matchup_data = api.get_team_matchups(team_data['team_id'])
 
-    for team in teams:
-        team.update_matchups(api.get_team_matchups(team.id))
+        # Create a Team object with team and matchup info
+        teams.append(Team.from_api_data_with_matchups(team_data, matchup_data))
 
     return teams
 
