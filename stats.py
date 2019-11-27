@@ -119,6 +119,22 @@ class Stats():
         }
         return Stats(**stats)
 
+    def get_differentials(self, other):
+        differentials = {
+            'goals' : self.goals - other.goals,
+            'assists' : self.assists - other.assists,
+            'penalty_minutes' : self.penalty_minutes - other.penalty_minutes,
+            'shots_on_goal' : self.shots_on_goal - other.shots_on_goal,
+            'hits' : self.hits - other.hits,
+            'blocks' : self.blocks - other.blocks,
+            'wins' : self.wins - other.wins,
+            'goalie_ga' : other.goalie_ga - self.goalie_ga,
+            'goalie_gaa' : other.goalie_gaa - self.goalie_gaa,
+            'goalie_sa' : self.goalie_sa - other.goalie_sa,
+            'goalie_so' : self.goalie_so - other.goalie_so
+        }
+        return differentials
+
     @staticmethod
     def mean(list_of_Stats):
         return sum(list_of_Stats)/len(list_of_Stats)
