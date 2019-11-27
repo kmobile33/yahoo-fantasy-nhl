@@ -12,6 +12,7 @@ class FantasyHockeyApi(YahooApi):
         return response['fantasy_content']['team']
 
     def get_team_matchups(self, team_id):
+        """For a given team, fetch matchup data for all weeks of the season, including stat results"""
         response = self.get(self.base_url + "team/" + str(self.game) + ".l." + str(self.league) + ".t." + str(team_id) + "/matchups/")
         raw_matchup_data = response['fantasy_content']['team'][1]['matchups']
 
@@ -43,6 +44,7 @@ class FantasyHockeyApi(YahooApi):
         return matchups
 
     def get_all_teams(self):
+        """Gets a list of teams participating in the fantasy league along with their basic team info"""
         response = self.get(self.base_url + "/league/" + str(self.game) + ".l." + str(self.league) + "/teams/")
         raw_team_list = response['fantasy_content']['league'][1]['teams']
         
@@ -78,7 +80,7 @@ class FantasyHockeyApi(YahooApi):
             return default
 
     def __flatten_list_of_dicts(self, list_of_dictionaries):
-        """Flatten the list of property dictionaries into one dictionary.This ignores non-dictionaries in the list"""
+        """Flatten the list of property dictionaries into one dictionary. This ignores non-dictionaries in the list"""
         result_dict = {}
         for single_dictionary in list_of_dictionaries:
             if type(single_dictionary) == dict:
