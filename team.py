@@ -42,7 +42,7 @@ class Team:
                 matchups.append(Matchup.from_api_data(raw_matchup, team_id))
 
         # Get average stats
-        average_stats = Stats.mean([x.stats for x in matchups])
+        average_stats = Stats.mean([x.stats for x in matchups if x.is_complete])
         
         # Setup team info for __init__
         team_kwargs = {
