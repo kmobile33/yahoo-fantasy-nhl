@@ -29,17 +29,10 @@ class FantasyHockeyApi(YahooApi):
                         team_info = self.__flatten_list_of_dicts(matchup_team_dictionary[mk]['team'][0])
                         # Check if we have the target team_id, and if so, gather the stats
                         if (self.__safe_cast(mk, int) != None) and (team_info['team_id'] == team_id):
-                            raw_stat_info = matchup_team_dictionary[mk]['team'][1]['team_stats']['stats']
-
-                            # Flatten out the stat dict so its just {stat_id: value} rather than nested crap
-                            stat_dict = {}
-                            for stat in raw_stat_info:
-                                pair = stat['stat']
-                                stat_dict[pair['stat_id']] = pair['value']
-
                             # Set the 'stats' part of the matchup info and jump out
-                            matchup_info['stats'] = stat_dict
+                            matchup_info['stats'] = matchup_team_dictionary[mk]['team'][1]['team_stats']['stats']
                             break
+
                 if 'stats' not in matchup_info.keys():
                     raise Exception("Could not find stats info for " + str(team_id))
 
@@ -48,7 +41,7 @@ class FantasyHockeyApi(YahooApi):
                 
                 matchups.append(matchup_info)
 
-        return 
+        return matchups
 
     def get_all_teams(self):
         response = self.get(self.base_url + "/league/" + str(self.game) + ".l." + str(self.league) + "/teams/")

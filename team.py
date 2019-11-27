@@ -1,3 +1,7 @@
+from datetime import datetime
+
+from matchup import Matchup
+
 class Team:
     def __init__(self, raw_team_info, roster_info = None, matchup_info = None):
         self.name = raw_team_info['name']
@@ -8,5 +12,10 @@ class Team:
         self.move_count = raw_team_info['number_of_moves']
         self.trade_count = raw_team_info['number_of_trades']
 
+        self.machups = []
+
     def update_matchups(self, raw_matchup_info):
-        None
+        for raw_matchup in raw_matchup_info:
+            if ( datetime.strptime(raw_matchup['week_start'], "%Y-%m-%d") < datetime.now()):
+                self.machups.append(Matchup(raw_matchup, self.id))
+
