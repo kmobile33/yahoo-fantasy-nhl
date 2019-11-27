@@ -14,6 +14,44 @@ class Stats():
         self.goalie_sa = kwargs.get('goalie_sa')
         self.goalie_so = kwargs.get('goalie_so')
 
+    def __add__(self, other):
+        """Overload of the add operator. GAA produces averages."""
+        stats = {
+            'goals' : self.goals + other.goals,
+            'assists' : self.assists + other.assists,
+            'penalty_minutes' : self.penalty_minutes + other.penalty_minutes,
+            'shots_on_goal' : self.shots_on_goal + other.shots_on_goal,
+            'hits' : self.hits + other.hits,
+            'blocks' : self.blocks + other.blocks,
+            'wins' : self.wins + other.wins,
+            'goalie_ga' : self.goalie_ga + other.goalie_ga,
+            'goalie_gaa' : 0.5*(self.goalie_gaa or 0) + 0.5*(other.goalie_gaa or 0),
+            'goalie_sa' : self.goalie_sa + other.goalie_sa,
+            'goalie_so' : self.goalie_so + other.goalie_so
+        }
+        return Stats(**stats)
+
+    def __radd__(self, other):
+        """Overload of the add operator. GAA produces averages."""
+        stats = {
+            'goals' : self.goals + other,
+            'assists' : self.assists + other,
+            'penalty_minutes' : self.penalty_minutes + other,
+            'shots_on_goal' : self.shots_on_goal + other,
+            'hits' : self.hits + other,
+            'blocks' : self.blocks + other,
+            'wins' : self.wins + other,
+            'goalie_ga' : self.goalie_ga + other,
+            'goalie_gaa' : 0.5*(self.goalie_gaa or 0) + 0.5*other,
+            'goalie_sa' : self.goalie_sa + other,
+            'goalie_so' : self.goalie_so + other
+        }
+        return Stats(**stats)
+
+    @staticmethod
+    def mean(list_of_Stats):
+        return sum(list_of_Stats)/len(list_of_Stats)
+
     @classmethod
     def from_api_data(cls, raw_stat_info):
         # Flatten out the stat dict so its just {stat_id: value} rather than nested crap

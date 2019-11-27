@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from matchup import Matchup
+from stats import Stats
 
 class Team:
     def __init__(self, **kwargs):
@@ -12,7 +13,8 @@ class Team:
         self.move_count = kwargs.get('move_count')
         self.trade_count = kwargs.get('trade_count')
 
-        self.matchups = kwargs.get('matchups') or []      
+        self.matchups = kwargs.get('matchups') or []
+        self.average_stats = kwargs.get('average_stats')
 
     @classmethod
     def from_raw_api_data(cls, raw_team_info):
@@ -38,6 +40,9 @@ class Team:
         for raw_matchup in raw_matchup_info:
             if ( datetime.strptime(raw_matchup['week_start'], "%Y-%m-%d") < datetime.now()):
                 matchups.append(Matchup.from_api_data(raw_matchup, team_id))
+
+        # Get average stats
+        average_stats = Stats.mean([x.stats for x in matchups])
         
         # Setup team info for __init__
         team_kwargs = {
@@ -48,11 +53,9 @@ class Team:
             'waiver_priority' : raw_team_info['waiver_priority'],
             'move_count' : raw_team_info['number_of_moves'],
             'trade_count' : raw_team_info['number_of_trades'],
-            'matchups' : matchups
+            'matchups' : matchups,
+            'average_stats' : average_stats
         }
 
         return cls(**team_kwargs)
-
-    # def get_average_stats():
-    #     for matchup in matchups:
             
