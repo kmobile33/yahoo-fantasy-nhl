@@ -119,6 +119,20 @@ class Stats():
         }
         return Stats(**stats)
 
+    def __str__(self):
+        return \
+            "goals: " + str(self.goals) + "\r\n"\
+            "assists: " + str(self.assists) + "\r\n"\
+            "penalty_minutes: " + str(self.penalty_minutes) + "\r\n"\
+            "shots_on_goal: " + str(self.shots_on_goal) + "\r\n"\
+            "hits: " + str(self.hits) + "\r\n"\
+            "blocks: " + str(self.blocks) + "\r\n"\
+            "wins: " + str(self.wins) + "\r\n"\
+            "goalie_ga: " + str(self.goalie_ga) + "\r\n"\
+            "goalie_gaa: " + str(self.goalie_gaa) + "\r\n"\
+            "goalie_sa: " + str(self.goalie_sa) + "\r\n"\
+            "goalie_so: " + str(self.goalie_so) + "\r\n"
+
     def get_differentials(self, other):
         differentials = {
             'goals' : self.goals - other.goals,

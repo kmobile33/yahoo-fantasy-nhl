@@ -39,6 +39,8 @@ def get_my_team_stat_deviation(api):
 def main():
     api = FantasyHockeyApi('oauth.json', LEAGUE)
     deviation = get_my_team_stat_deviation(api)
+
+    print(Stats(**deviation))
     None
 
 if __name__ == "__main__":
