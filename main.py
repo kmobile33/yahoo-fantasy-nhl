@@ -34,14 +34,26 @@ def get_my_team_stat_deviation(api):
 
     my_team_avg_stats = [x for x in teams if x.is_my_team][0].average_stats
 
-    return my_team_avg_stats.get_differentials(league_average_stats)
+    deviation = my_team_avg_stats.get_differentials(league_average_stats)
+    print(Stats(**deviation))
+    
+    return deviation
+
+def compare_team_averages(api, team_1_name, team_2_name):
+    teams = load_all_team_info(api)
+    
+    team_1_stats = [x for x in teams if x.name == team_1_name][0].average_stats
+    team_2_stats = [x for x in teams if x.name == team_2_name][0].average_stats
+
+    deviation = team_1_stats.get_differentials(team_2_stats)
+    print(Stats(**deviation))
+
+    return deviation
 
 def main():
     api = FantasyHockeyApi('oauth.json', LEAGUE)
-    deviation = get_my_team_stat_deviation(api)
-
-    print(Stats(**deviation))
-    None
+    get_my_team_stat_deviation(api)
+    compare_team_averages(api, "K.E.V.I.N", "Pekka in the Backes")
 
 if __name__ == "__main__":
     main()
