@@ -35,6 +35,7 @@ def get_my_team_stat_deviation(api):
     my_team_avg_stats = [x for x in teams if x.is_my_team][0].average_stats
 
     deviation = my_team_avg_stats.get_differentials(league_average_stats)
+    print("My team stat dev from league avg:")
     print(Stats(**deviation))
     
     return deviation
@@ -46,6 +47,7 @@ def compare_team_averages(api, team_1_name, team_2_name):
     team_2_stats = [x for x in teams if x.name == team_2_name][0].average_stats
 
     deviation = team_1_stats.get_differentials(team_2_stats)
+    print("Stat dev between " + team_1_name + " and " + team_2_name + ":")
     print(Stats(**deviation))
 
     return deviation
@@ -53,7 +55,7 @@ def compare_team_averages(api, team_1_name, team_2_name):
 def main():
     api = FantasyHockeyApi('oauth.json', LEAGUE)
     get_my_team_stat_deviation(api)
-    compare_team_averages(api, "K.E.V.I.N", "Pekka in the Backes")
+    compare_team_averages(api, "K.E.V.I.N", "I'm Bettman!")
 
 if __name__ == "__main__":
     main()
