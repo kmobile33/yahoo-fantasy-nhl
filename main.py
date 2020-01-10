@@ -3,8 +3,8 @@ import json
 import time
 
 from yahoo.fantasy_hockey_api import FantasyHockeyApi
-from team import Team
-from stats import Stats
+from models.team import Team
+from models.stats import Stats
 
 LEAGUE = 52805 #75370
 TEAM = 5

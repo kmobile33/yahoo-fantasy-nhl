@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from matchup import Matchup
-from stats import Stats
+from models.matchup import Matchup
+from models.stats import Stats
 
 class Team:
     def __init__(self, **kwargs):
@@ -28,8 +28,8 @@ class Team:
                 "waiver_priority": obj.waiver_priority,
                 "move_count": obj.move_count,
                 "trade_count": obj.trade_count,
-                #[Matchup.serialize(x) for x in obj.matchups],
-                #Stats.serialize(obj.average_stats)
+                "matchups": [Matchup.serialize(x) for x in obj.matchups],
+                "average_stats": Stats.serialize(obj.average_stats)
             }
         else:
             raise TypeError(obj)

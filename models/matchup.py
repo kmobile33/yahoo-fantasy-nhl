@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from stats import Stats
+from models.stats import Stats
 
 class Matchup():
     def __init__(self, **kwargs):
@@ -17,16 +17,16 @@ class Matchup():
     def serialize(obj):
         """JSON serializer for matchup objects"""
         if isinstance(obj, Matchup):
-            return [
-                obj.week,
-                str(obj.week_start),
-                str(obj.week_end),
-                obj.has_started,
-                obj.is_complete,
-                obj.is_tied,
-                obj.won,
-                Stats.serialize(obj.stats)
-            ]
+            return {
+                "week": obj.week,
+                "week_start": str(obj.week_start),
+                "week_end": str(obj.week_end),
+                "has_started": obj.has_started,
+                "is_complete": obj.is_complete,
+                "is_tied": obj.is_tied,
+                "won": obj.won,
+                "stats": Stats.serialize(obj.stats)
+            }
         else:
             raise TypeError(obj)
 

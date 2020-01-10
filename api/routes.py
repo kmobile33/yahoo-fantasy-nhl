@@ -1,7 +1,7 @@
 import json
 from flask import jsonify, Response
 from api import app, yahoo_api
-from team import Team
+from models.team import Team
 
 
 @app.route('/', methods=['GET'])

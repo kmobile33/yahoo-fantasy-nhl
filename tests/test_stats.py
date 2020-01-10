@@ -1,6 +1,6 @@
 import unittest
 
-from stats import Stats
+from models.stats import Stats
 
 class TestStatMethods(unittest.TestCase):
     def setUp(self):
