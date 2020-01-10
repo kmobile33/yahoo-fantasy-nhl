@@ -16,6 +16,24 @@ class Team:
         self.matchups = kwargs.get('matchups') or []
         self.average_stats = kwargs.get('average_stats')
 
+    @staticmethod
+    def serialize(obj):
+        """JSON serializer for team objects"""
+        if isinstance(obj, Team):
+            return {
+                "name": obj.name,
+                "id":   obj.id,
+                "owner": obj.owner,
+                "is_my_team": obj.is_my_team,
+                "waiver_priority": obj.waiver_priority,
+                "move_count": obj.move_count,
+                "trade_count": obj.trade_count,
+                #[Matchup.serialize(x) for x in obj.matchups],
+                #Stats.serialize(obj.average_stats)
+            }
+        else:
+            raise TypeError(obj)
+
     @classmethod
     def from_raw_api_data(cls, raw_team_info):
         team_kwargs = {

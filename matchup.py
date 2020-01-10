@@ -13,6 +13,23 @@ class Matchup():
         self.won = kwargs.get('won')
         self.stats = kwargs.get('stats')
 
+    @staticmethod
+    def serialize(obj):
+        """JSON serializer for matchup objects"""
+        if isinstance(obj, Matchup):
+            return [
+                obj.week,
+                str(obj.week_start),
+                str(obj.week_end),
+                obj.has_started,
+                obj.is_complete,
+                obj.is_tied,
+                obj.won,
+                Stats.serialize(obj.stats)
+            ]
+        else:
+            raise TypeError(obj)
+
     @classmethod
     def from_api_data(cls, raw_matchup_info, team_id):
         now = datetime.now()

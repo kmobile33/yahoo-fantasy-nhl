@@ -153,6 +153,14 @@ class Stats():
     def mean(list_of_Stats):
         return sum(list_of_Stats)/len(list_of_Stats)
 
+    @staticmethod
+    def serialize(obj):
+        """JSON serializer for stats objects"""
+        if isinstance(obj, Stats):
+            return obj.__dict__
+        else:
+            raise TypeError(obj)
+
     @classmethod
     def from_api_data(cls, raw_stat_info):
         # Flatten out the stat dict so its just {stat_id: value} rather than nested crap
