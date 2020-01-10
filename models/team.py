@@ -28,8 +28,8 @@ class Team:
                 "waiver_priority": obj.waiver_priority,
                 "move_count": obj.move_count,
                 "trade_count": obj.trade_count,
-                "matchups": [Matchup.serialize(x) for x in obj.matchups],
-                "average_stats": Stats.serialize(obj.average_stats)
+                "matchups": None if not obj.matchups else [Matchup.serialize(x) for x in obj.matchups],
+                "average_stats": None if not obj.average_stats else Stats.serialize(obj.average_stats)
             }
         else:
             raise TypeError(obj)

@@ -10,7 +10,13 @@ class FantasyHockeyApi(YahooApi):
 
     def get_team(self, team_id):
         response = self.get(self.base_url + "team/" + str(self.game) + ".l." + str(self.league) + ".t." + str(team_id) + "/")
-        return response['fantasy_content']['team']
+        try:
+            raw_team_data = self.__flatten_list_of_dicts(response['fantasy_content']['team'][0])
+        except KeyError as err:
+            if "fantasy_content" in err.args:
+                # The request was successful, but there was no matching team ID
+                return None
+        return raw_team_data
 
     def get_team_matchups(self, team_id):
         """For a given team, fetch matchup data for all weeks of the season, including stat results"""

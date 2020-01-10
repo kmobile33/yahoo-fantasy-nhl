@@ -8,7 +8,7 @@ from models.team import Team
 def home():
     return("<p>This is the api!</p>")
 
-@app.route('/teams', methods=['GET'])
+@app.route('/team', methods=['GET'])
 def teams():
     """Gets the team info from the Yahoo API and creates a list of Team objects"""
     teams = []
@@ -23,6 +23,21 @@ def teams():
 
     return Response(
         response=raw_json,
+        status=200,
+        mimetype='application/json'
+    )
+
+@app.route('/team/<int:id>')
+def team(id):
+    raw_team_data = yahoo_api.get_team(id)
+
+    if not raw_team_data:
+        return Response(response="Team does not exist", status=400)
+
+    team = Team.from_raw_api_data(yahoo_api.get_team(id))
+
+    return Response(
+        response=json.dumps(team, default=Team.serialize),
         status=200,
         mimetype='application/json'
     )
