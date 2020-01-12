@@ -1,3 +1,4 @@
+import xml.etree.ElementTree as et
 from yahoo.yahoo_api import YahooApi
 from utilities import utilities
 
@@ -88,3 +89,37 @@ class FantasyHockeyApi(YahooApi):
                 result_dict.update(single_dictionary)
 
         return result_dict        
+
+
+class XmlFantasyHockeyApi(YahooApi):
+    
+    def __init__(self, credentials, league_id, game_id=None):
+        super().__init__(credentials)
+        self.base_url = "https://fantasysports.yahooapis.com/fantasy/v2/"
+        self._ns = {"yahoo": "http://fantasysports.yahooapis.com/fantasy/v2/base.rng"}
+        self.game = game_id or self.get_game()
+        self.league = league_id
+
+    def get_game(self):
+        """Gets the game ID for the current NHL season in Yahoo"""
+        # Send the request
+        url = self.base_url + "game/nhl"
+        response = self.get(url, format='xml')
+
+        # Convert XML text into object and get game ID
+        game_id = et.fromstring(response)\
+            .find('yahoo:game', self._ns)\
+            .find('yahoo:game_id', self._ns)\
+            .text
+
+        return int(game_id)
+
+    def get_team(self, team_id):
+        """Gets the team info given a team's Yahoo specific team ID"""
+        # Send request
+        url = self.base_url + "team/" + str(self.game) + ".l." + str(self.league) + ".t." + str(team_id) + "/"
+        response = self.get(url, format='xml')
+        
+        # Convert XML text into object and return the outer team tag
+        return et.fromstring(response)\
+            .find('yahoo:team', self._ns)
