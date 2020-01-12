@@ -8,8 +8,8 @@ class FantasyHockeyApi(YahooApi):
         self.game = game_id or self.get_game()
         self.league = league_id
 
-    def get_team(self, team_id):
-        response = self.get(self.base_url + "team/" + str(self.game) + ".l." + str(self.league) + ".t." + str(team_id) + "/")
+    def get_team(self, team_id, format='json'):
+        response = self.get(self.base_url + "team/" + str(self.game) + ".l." + str(self.league) + ".t." + str(team_id) + "/", format=format)
         try:
             raw_team_data = self.__flatten_list_of_dicts(response['fantasy_content']['team'][0])
         except KeyError as err:
@@ -18,9 +18,9 @@ class FantasyHockeyApi(YahooApi):
                 return None
         return raw_team_data
 
-    def get_team_matchups(self, team_id):
+    def get_team_matchups(self, team_id, format='json'):
         """For a given team, fetch matchup data for all weeks of the season, including stat results"""
-        response = self.get(self.base_url + "team/" + str(self.game) + ".l." + str(self.league) + ".t." + str(team_id) + "/matchups/")
+        response = self.get(self.base_url + "team/" + str(self.game) + ".l." + str(self.league) + ".t." + str(team_id) + "/matchups/", format='json')
         raw_matchup_data = response['fantasy_content']['team'][1]['matchups']
 
         matchups = []
@@ -50,9 +50,9 @@ class FantasyHockeyApi(YahooApi):
 
         return matchups
 
-    def get_all_teams(self):
+    def get_all_teams(self, format='json'):
         """Gets a list of teams participating in the fantasy league along with their basic team info"""
-        response = self.get(self.base_url + "/league/" + str(self.game) + ".l." + str(self.league) + "/teams/")
+        response = self.get(self.base_url + "/league/" + str(self.game) + ".l." + str(self.league) + "/teams/", format=format)
         raw_team_list = response['fantasy_content']['league'][1]['teams']
         
         # Flatten the team info, because Yahoo's JSON is very packed with garbage info
@@ -66,19 +66,19 @@ class FantasyHockeyApi(YahooApi):
         
         return team_list
 
-    def get_team_roster(self, team_id):
-        return self.get(self.base_url + "team/" + str(self.game) + ".l." + str(self.league) + ".t." + str(team_id) + "/roster/")
+    def get_team_roster(self, team_id, format='json'):
+        return self.get(self.base_url + "team/" + str(self.game) + ".l." + str(self.league) + ".t." + str(team_id) + "/roster/", format=format)
 
-    def get_game(self):
+    def get_game(self, format='json'):
         """Fetches the game ID for the current NHL season in Yahoo"""
-        response = self.get(self.base_url + "game/nhl")
+        response = self.get(self.base_url + "game/nhl", format=format)
         return response['fantasy_content']['game'][0]['game_id']
 
-    def get_league(self):
-        return self.get(self.base_url + "league/" + str(self.game) + ".l." + str(self.league) + "/")
+    def get_league(self, format='json'):
+        return self.get(self.base_url + "league/" + str(self.game) + ".l." + str(self.league) + "/", format=format)
 
-    def get_all_players(self):
-        return self.get(self.base_url + "league/" + str(self.game) + ".l." + str(self.league) + "/players/")
+    def get_all_players(self, format='json'):
+        return self.get(self.base_url + "league/" + str(self.game) + ".l." + str(self.league) + "/players/", format=format)
 
     def __flatten_list_of_dicts(self, list_of_dictionaries):
         """Flatten the list of property dictionaries into one dictionary. This ignores non-dictionaries in the list"""
@@ -88,4 +88,3 @@ class FantasyHockeyApi(YahooApi):
                 result_dict.update(single_dictionary)
 
         return result_dict        
-        
