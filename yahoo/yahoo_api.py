@@ -1,5 +1,6 @@
 import datetime
 import json
+import xml.etree.ElementTree as ET
 import webbrowser
 from rauth import OAuth2Service
 from rauth.utils import parse_utf8_qsl
@@ -72,9 +73,12 @@ class YahooApi:
         with open(self._credentials_path, 'w') as credentials_file:
             json.dump(self.credentials, credentials_file, default=str)
 
-    def get(self, *args, **kwargs):
+    def get(self, *args, response_format='json', **kwargs):
         try:
-            data = self.session.get(params={'format': 'json'}, verify=False, *args, **kwargs)
+            if response_format == 'xml':
+                data = self.session.get(verify=False, *args, **kwargs)
+            else:
+                data = self.session.get(params={'format': 'json'}, verify=False, *args, **kwargs)
         except:
             # TODO - check for token expiration
             # Obtain new access token
@@ -85,5 +89,8 @@ class YahooApi:
                 'refresh_token': self.access_token_response['refresh_token']
             }
             self.session = self.service.get_auth_session(data=data, decoder=json.loads, verify=False)
-            data = self.session.get(params={'format': 'json'}, verify=False, *args, **kwargs)
-        return data.json()
+            if response_format == 'xml':
+                data = self.session.get(verify=False, *args, **kwargs)
+            else:
+                data = self.session.get(params={'format': 'json'}, verify=False, *args, **kwargs)
+        return data.text if response_format == 'xml' else data.json()
