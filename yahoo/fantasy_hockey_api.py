@@ -123,3 +123,23 @@ class XmlFantasyHockeyApi(YahooApi):
         # Convert XML text into object and return the outer team tag
         return et.fromstring(response)\
             .find('yahoo:team', self._ns)
+
+    def get_team_matchups(self, team_id):
+        """For a given team, fetch matchup data for all weeks of the season, including stat results"""
+        # Send request
+        url = self.base_url + "team/" + str(self.game) + ".l." + str(self.league) + ".t." + str(team_id) + "/matchups/"
+        response = self.get(url, format='xml')
+
+        return et.fromstring(response)\
+            .find('yahoo:team', self._ns)\
+            .find('yahoo:matchups', self._ns)
+
+    def get_all_teams(self):
+        """Gets a list of teams participating in the fantasy league along with their basic team info"""
+        # Send request
+        url = self.base_url + "/league/" + str(self.game) + ".l." + str(self.league) + "/teams/"
+        response = self.get(url, format='xml')
+
+        return et.fromstring(response)\
+            .find('yahoo:league', self._ns)\
+            .find('yahoo:teams', self._ns)
