@@ -83,15 +83,15 @@ class Team:
 
         team_kwargs = {
             'name' : team_info_xml.find('ns:name', ns).text,
-            'id' : team_info_xml.find('ns:team_id', ns).text,
+            'id' : int(team_info_xml.find('ns:team_id', ns).text),
             'owner' : team_info_xml\
                 .find('ns:managers', ns)\
                 .find('ns:manager', ns)\
                 .find('ns:nickname', ns).text,
-            'is_my_team' : team_info_xml.find('ns:is_owned_by_current_login', ns).text,
-            'waiver_priority' : team_info_xml.find('ns:waiver_priority', ns).text,
-            'move_count' : team_info_xml.find('ns:number_of_moves', ns).text,
-            'trade_count' : team_info_xml.find('ns:number_of_trades', ns).text
+            'is_my_team' : bool(team_info_xml.find('ns:is_owned_by_current_login', ns).text),
+            'waiver_priority' : int(team_info_xml.find('ns:waiver_priority', ns).text),
+            'move_count' : int(team_info_xml.find('ns:number_of_moves', ns).text),
+            'trade_count' : int(team_info_xml.find('ns:number_of_trades', ns).text)
         }
 
         return cls(**team_kwargs)
