@@ -66,15 +66,14 @@ class Matchup():
         winner_team_key = matchup_xml.find('ns:winner_team_key', ns).text
 
         # Get stats
-        teams = matchup_xml.findall('ns:teams', ns)
-        stats = teams\
-            .find('ns:team', ns)\
+        teams = matchup_xml.find('ns:teams', ns).findall('ns:team', ns)
+        team = [x for x in teams if int(x.find('ns:team_id', ns).text) == team_id][0]
+        stats = team\
             .find('ns:team_stats', ns)\
             .find('ns:stats', ns)\
-            .text
         
         matchup_kwargs = {
-            'week' : matchup_xml.find('ns:week', ns).text,
+            'week' : int(matchup_xml.find('ns:week', ns).text),
             'week_start' : week_start,
             'week_end' : week_end,
             'has_started' : has_started,
@@ -82,7 +81,7 @@ class Matchup():
             'is_tied' : is_tied,
             'won' : None if (not is_complete or is_tied)\
                 else bool(winner_team_key[(winner_team_key.rfind(".") + 1):] == team_id),
-            'stats' : None if not has_started else Stats.from_api_data(stats)
+            'stats' : None if not has_started else Stats.from_xml_api_data(stats)
         }
 
         return cls(**matchup_kwargs)
