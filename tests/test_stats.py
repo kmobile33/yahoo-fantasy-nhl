@@ -1,4 +1,5 @@
 import unittest
+import xml.etree.ElementTree as et
 
 from models.stats import Stats
 
@@ -228,3 +229,36 @@ class TestStatMethods(unittest.TestCase):
         self.assertEqual(result.goalie_gaa, 1.00)
         self.assertEqual(result.goalie_sa, 45)
         self.assertEqual(result.goalie_so, 0)
+
+    def test_from_xml_api_data(self):
+        ns = {"ns": "http://fantasysports.yahooapis.com/fantasy/v2/base.rng"}
+        stats_xml = et.parse('./sample-api-responses/stats.xml')\
+            .find('ns:stats', ns)
+
+        result = Stats.from_xml_api_data(stats_xml)
+
+        expected = Stats(**{
+            'goals': 16,
+            'assists': 42,
+            'penalty_minutes': 37,
+            'shots_on_goal': 195,
+            'hits': 89,
+            'blocks': 63,
+            'wins': 3,
+            'goalie_ga': 24,
+            'goalie_gaa': 2.94,
+            'goalie_sa': 253,
+            'goalie_so': 0
+        })
+
+        self.assertEqual(expected.goals, result.goals)
+        self.assertEqual(expected.assists, result.assists)
+        self.assertEqual(expected.penalty_minutes, result.penalty_minutes)
+        self.assertEqual(expected.shots_on_goal, result.shots_on_goal)
+        self.assertEqual(expected.hits, result.hits)
+        self.assertEqual(expected.blocks, result.blocks)
+        self.assertEqual(expected.wins, result.wins)
+        self.assertEqual(expected.goalie_ga, result.goalie_ga)
+        self.assertEqual(expected.goalie_gaa, result.goalie_gaa)
+        self.assertEqual(expected.goalie_sa, result.goalie_sa)
+        self.assertEqual(expected.goalie_so, result.goalie_so)

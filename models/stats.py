@@ -182,3 +182,28 @@ class Stats():
         }
         
         return cls(**stat_kwargs)
+
+    @classmethod
+    def from_xml_api_data(cls, stats_xml):
+        ns = {"ns": "http://fantasysports.yahooapis.com/fantasy/v2/base.rng"}
+
+        # Get a dictionary of the stat IDs and their values
+        stat_dict = {}
+        for stat in stats_xml.findall('ns:stat', ns):
+            stat_dict[stat.find('ns:stat_id', ns).text] = stat.find('ns:value', ns).text
+        
+        stat_kwargs = {
+            'goals' : utilities.safe_cast(stat_dict['1'], int),
+            'assists' : utilities.safe_cast(stat_dict['2'], int),
+            'penalty_minutes' : utilities.safe_cast(stat_dict['5'], int),
+            'shots_on_goal' : utilities.safe_cast(stat_dict['14'], int),
+            'hits' : utilities.safe_cast(stat_dict['31'], int),
+            'blocks' : utilities.safe_cast(stat_dict['32'], int),
+            'wins' : utilities.safe_cast(stat_dict['19'], int),
+            'goalie_ga' : utilities.safe_cast(stat_dict['22'], int),
+            'goalie_gaa' : utilities.safe_cast(stat_dict['23'], float),
+            'goalie_sa' : utilities.safe_cast(stat_dict['24'], int),
+            'goalie_so' : utilities.safe_cast(stat_dict['27'], int)
+        }
+        
+        return cls(**stat_kwargs)
