@@ -124,14 +124,18 @@ class XmlFantasyHockeyApi(YahooApi):
         return et.fromstring(response)\
             .find('yahoo:team', self._ns)
 
-    def get_team_matchups(self, team_id):
-        """For a given team, fetch matchup data for all weeks of the season, including stat results"""
+    def get_team_with_matchups(self, team_id):
+        """For a given team, fetch all data, including matchups and stats"""
         # Send request
         url = self.base_url + "team/" + str(self.game) + ".l." + str(self.league) + ".t." + str(team_id) + "/matchups/"
         response = self.get(url, format='xml')
 
         return et.fromstring(response)\
-            .find('yahoo:team', self._ns)\
+            .find('yahoo:team', self._ns)
+
+    def get_matchups(self, team_id):
+        """For a given team, fetch matchup data for all weeks of the season, including stat results"""
+        return self.get_team_with_matchups(team_id)\
             .find('yahoo:matchups', self._ns)
 
     def get_all_teams(self):

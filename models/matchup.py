@@ -63,7 +63,7 @@ class Matchup():
         has_started = (week_start < now)
         is_complete = (week_end < now)
         is_tied = None if not is_complete else bool(matchup_xml.find('ns:is_tied', ns).text)
-        winner_team_key = matchup_xml.find('ns:winner_team_key', ns).text
+        winner_team_key = matchup_xml.find('ns:winner_team_key', ns)
 
         # Get stats
         teams = matchup_xml.find('ns:teams', ns).findall('ns:team', ns)
@@ -80,7 +80,7 @@ class Matchup():
             'is_complete' : is_complete,
             'is_tied' : is_tied,
             'won' : None if (not is_complete or is_tied)\
-                else bool(winner_team_key[(winner_team_key.rfind(".") + 1):] == team_id),
+                else bool(winner_team_key.text[(winner_team_key.text.rfind(".") + 1):] == team_id),
             'stats' : None if not has_started else Stats.from_xml_api_data(stats)
         }
 
