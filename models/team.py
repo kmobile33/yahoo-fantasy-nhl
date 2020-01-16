@@ -1,4 +1,5 @@
 from datetime import datetime
+import xml.etree.ElementTree as et
 
 from models.matchup import Matchup
 from models.stats import Stats
@@ -100,7 +101,7 @@ class Team:
                 .find('ns:managers', ns)\
                 .find('ns:manager', ns)\
                 .find('ns:nickname', ns).text,
-            'is_my_team' : bool(is_my_team.text) if is_my_team else None,
+            'is_my_team' : bool(is_my_team.text) if isinstance(is_my_team, et.Element) else None,
             'waiver_priority' : int(team_info_xml.find('ns:waiver_priority', ns).text),
             'move_count' : int(team_info_xml.find('ns:number_of_moves', ns).text),
             'trade_count' : int(team_info_xml.find('ns:number_of_trades', ns).text),
