@@ -1,0 +1,14 @@
+<ns0:fantasy_content xmlns:ns0="http://fantasysports.yahooapis.com/fantasy/v2/base.rng" xmlns:ns1="http://www.yahooapis.com/v1/base.rng" copyright="Data provided by Yahoo! and STATS, LLC" refresh_rate="60" time="13.951063156128ms" xml:lang="en-US" ns1:uri="http://fantasysports.yahooapis.com/fantasy/v2/game/nhl">
+ <ns0:game>
+  <ns0:game_key>396</ns0:game_key>
+  <ns0:game_id>396</ns0:game_id>
+  <ns0:name>Hockey</ns0:name>
+  <ns0:code>nhl</ns0:code>
+  <ns0:type>full</ns0:type>
+  <ns0:url>https://hockey.fantasysports.yahoo.com/hockey</ns0:url>
+  <ns0:season>2019</ns0:season>
+  <ns0:is_registration_over>0</ns0:is_registration_over>
+  <ns0:is_game_over>0</ns0:is_game_over>
+  <ns0:is_offseason>0</ns0:is_offseason>
+ </ns0:game>
+</ns0:fantasy_content>

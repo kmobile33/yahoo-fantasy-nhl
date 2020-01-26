@@ -1,4 +1,5 @@
 from datetime import datetime
+import xml.etree.ElementTree as et
 
 from models.matchup import Matchup
 from models.stats import Stats
@@ -76,4 +77,36 @@ class Team:
         }
 
         return cls(**team_kwargs)
-            
+
+    @classmethod
+    def from_xml_api_data(cls, team_info_xml):
+        ns = {"ns": "http://fantasysports.yahooapis.com/fantasy/v2/base.rng"}
+
+        team_id = int(team_info_xml.find('ns:team_id', ns).text)
+        is_my_team = team_info_xml.find('ns:is_owned_by_current_login', ns)
+
+        # Convert matchups if they were provided
+        matchups = []
+        average_stats = None
+        matchup_xml = team_info_xml.find('ns:matchups', ns)
+        if matchup_xml:
+            matchups = [Matchup.from_xml_api_data(x, team_id) for x in matchup_xml.findall('ns:matchup', ns)]
+            average_stats = Stats.mean([x.stats for x in matchups if x.is_complete])
+
+
+        team_kwargs = {
+            'name' : team_info_xml.find('ns:name', ns).text,
+            'id' : team_id,
+            'owner' : team_info_xml\
+                .find('ns:managers', ns)\
+                .find('ns:manager', ns)\
+                .find('ns:nickname', ns).text,
+            'is_my_team' : bool(is_my_team.text) if isinstance(is_my_team, et.Element) else None,
+            'waiver_priority' : int(team_info_xml.find('ns:waiver_priority', ns).text),
+            'move_count' : int(team_info_xml.find('ns:number_of_moves', ns).text),
+            'trade_count' : int(team_info_xml.find('ns:number_of_trades', ns).text),
+            'matchups' : matchups,
+            'average_stats' : average_stats or None
+        }
+
+        return cls(**team_kwargs)

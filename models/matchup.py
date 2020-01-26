@@ -52,3 +52,36 @@ class Matchup():
         }
 
         return cls(**matchup_kwargs)
+
+    @classmethod
+    def from_xml_api_data(cls, matchup_xml, team_id):
+        ns = {"ns": "http://fantasysports.yahooapis.com/fantasy/v2/base.rng"}
+
+        now = datetime.now()
+        week_start = datetime.strptime(matchup_xml.find('ns:week_start', ns).text, "%Y-%m-%d")
+        week_end = datetime.strptime(matchup_xml.find('ns:week_end', ns).text, "%Y-%m-%d")
+        has_started = (week_start < now)
+        is_complete = (week_end < now)
+        is_tied = None if not is_complete else bool(matchup_xml.find('ns:is_tied', ns).text)
+        winner_team_key = matchup_xml.find('ns:winner_team_key', ns)
+
+        # Get stats
+        teams = matchup_xml.find('ns:teams', ns).findall('ns:team', ns)
+        team = [x for x in teams if int(x.find('ns:team_id', ns).text) == team_id][0]
+        stats = team\
+            .find('ns:team_stats', ns)\
+            .find('ns:stats', ns)\
+        
+        matchup_kwargs = {
+            'week' : int(matchup_xml.find('ns:week', ns).text),
+            'week_start' : week_start,
+            'week_end' : week_end,
+            'has_started' : has_started,
+            'is_complete' : is_complete,
+            'is_tied' : is_tied,
+            'won' : None if (not is_complete or is_tied)\
+                else bool(winner_team_key.text[(winner_team_key.text.rfind(".") + 1):] == team_id),
+            'stats' : None if not has_started else Stats.from_xml_api_data(stats)
+        }
+
+        return cls(**matchup_kwargs)

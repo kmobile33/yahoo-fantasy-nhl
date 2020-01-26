@@ -73,12 +73,10 @@ class YahooApi:
         with open(self._credentials_path, 'w') as credentials_file:
             json.dump(self.credentials, credentials_file, default=str)
 
-    def get(self, *args, response_format='json', **kwargs):
+    def get(self, *args, format, **kwargs):
+        getter = self._get_getter(format)
         try:
-            if response_format == 'xml':
-                data = self.session.get(verify=False, *args, **kwargs)
-            else:
-                data = self.session.get(params={'format': 'json'}, verify=False, *args, **kwargs)
+            return getter(*args, **kwargs)
         except:
             # TODO - check for token expiration
             # Obtain new access token
@@ -89,8 +87,20 @@ class YahooApi:
                 'refresh_token': self.access_token_response['refresh_token']
             }
             self.session = self.service.get_auth_session(data=data, decoder=json.loads, verify=False)
-            if response_format == 'xml':
-                data = self.session.get(verify=False, *args, **kwargs)
-            else:
-                data = self.session.get(params={'format': 'json'}, verify=False, *args, **kwargs)
-        return data.text if response_format == 'xml' else data.json()
+            return getter(*args, **kwargs)
+
+    def _get_getter(self, format):
+        if format.lower() == 'json':
+            return self._get_json
+        elif format.lower() == 'xml':
+            return self._get_xml
+        else:
+            raise ValueError(format)
+
+    def _get_json(self, *args, **kwargs):
+        data = self.session.get(params={'format': 'json'}, verify=False, *args, **kwargs)
+        return data.json()
+
+    def _get_xml(self, *args, **kwargs):
+        data = self.session.get(verify=False, *args, **kwargs)
+        return data.text
