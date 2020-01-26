@@ -36,6 +36,22 @@ def team(id):
         mimetype='application/json'
     )
 
+@app.route('/team/<int:id>/compare_stats')
+def compare_to_league_averages(id):
+    teams = _get_all_team_info()
+
+    league_average_stats = _get_league_average_stats(teams)
+
+    selected_team_avg_stats = [x for x in teams if x.id == id][0].average_stats
+
+    deviation = selected_team_avg_stats.get_differentials(league_average_stats)
+    
+    return Response(
+        response=json.dumps(deviation, default=Stats.serialize),
+        status=200,
+        mimetype='application/json'
+    )
+
 @app.route('/team/<int:team_1_id>/compare_stats/<int:team_2_id>')
 def compare_team_averages(team_1_id, team_2_id):
     teams = _get_all_team_info()
@@ -45,22 +61,6 @@ def compare_team_averages(team_1_id, team_2_id):
 
     deviation = team_1_stats.get_differentials(team_2_stats)
 
-    return Response(
-        response=json.dumps(deviation, default=Stats.serialize),
-        status=200,
-        mimetype='application/json'
-    )
-
-@app.route('/compare_stat_averages/<int:id>')
-def compare_stat_averages(id):
-    teams = _get_all_team_info()
-
-    league_average_stats = _get_league_average_stats(teams)
-
-    selected_team_avg_stats = [x for x in teams if x.id == id][0].average_stats
-
-    deviation = selected_team_avg_stats.get_differentials(league_average_stats)
-    
     return Response(
         response=json.dumps(deviation, default=Stats.serialize),
         status=200,
