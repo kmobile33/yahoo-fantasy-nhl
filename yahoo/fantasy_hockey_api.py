@@ -146,6 +146,16 @@ class XmlFantasyHockeyApi(YahooApi):
         return self.get_team_with_matchups(team_id)\
             .find('yahoo:matchups', self._ns)
 
+    def get_roster(self, team_id):
+        """For a given team, fetch current roster data"""
+        # Send request
+        url = self.base_url + "team/" + str(self.game) + ".l." + str(self.league) + ".t." + str(team_id) + "/roster/"
+        response = self.get(url, format='xml')
+
+        return et.fromstring(response)\
+            .find('yahoo:team', self._ns)
+            .find('yahoo:rosters', self._ns)
+
     def get_all_teams(self):
         """Gets a list of teams participating in the fantasy league along with their basic team info"""
         # Send request
