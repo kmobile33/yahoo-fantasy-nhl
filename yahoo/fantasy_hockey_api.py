@@ -1,8 +1,16 @@
 import xml.etree.ElementTree as et
-from yahoo.yahoo_api import YahooApi
+from yahoo.yahoo_api import YahooApi 
 from utilities import utilities
 
-class FantasyHockeyApi(YahooApi):
+def FantasyHockeyApi(format, credentials, league_id):
+    if format.lower() == 'json':
+        return JsonFantasyHockeyApi(credentials, league_id)
+    elif format.lower() == 'xml':
+        return XmlFantasyHockeyApi(credentials, league_id)
+    else:
+        raise NotImplementedError()
+
+class JsonFantasyHockeyApi(YahooApi):
     def __init__(self, credentials, league_id, game_id=None):
         super().__init__(credentials)
         self.base_url = "https://fantasysports.yahooapis.com/fantasy/v2/"
