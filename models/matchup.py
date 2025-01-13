@@ -61,7 +61,7 @@ class Matchup():
         week_start = datetime.strptime(matchup_xml.find('ns:week_start', ns).text, "%Y-%m-%d")
         week_end = datetime.strptime(matchup_xml.find('ns:week_end', ns).text, "%Y-%m-%d")
         has_started = (week_start < now)
-        is_complete = (week_end < now)
+        is_complete = matchup_xml.find('ns:status', ns).text == 'postevent'
         is_tied = None if not is_complete else bool(matchup_xml.find('ns:is_tied', ns).text)
         winner_team_key = matchup_xml.find('ns:winner_team_key', ns)
 
