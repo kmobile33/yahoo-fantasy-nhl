@@ -79,11 +79,11 @@ class Stats():
             'shots_on_goal' : self.shots_on_goal + other,
             'hits' : self.hits + other,
             'blocks' : self.blocks + other,
-            'wins' : self.wins + other,
-            'goalie_ga' : self.goalie_ga + other,
+            'wins' : (self.wins or 0) + other,
+            'goalie_ga' : (self.goalie_ga or 0) + other,
             'goalie_gaa' : (self.goalie_gaa or 0) + other,
-            'goalie_sa' : self.goalie_sa + other,
-            'goalie_so' : self.goalie_so + other
+            'goalie_sa' : (self.goalie_sa or 0) + other,
+            'goalie_so' : (self.goalie_so or 0) + other
         }
         return Stats(**stats)
 
